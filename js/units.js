@@ -10,7 +10,7 @@ const TYPES = {
   car: { team: 'eng', draw: 'car', name: 'Ground car', plural: 'Ground cars', speed: 18, r: 9, mid: 7, top: 19, hp: 260, dmg: 30, range: 118, cd: 2.0, aggro: 124, shot: 'beam' },
   jair: { team: 'eng', draw: 'jair', name: 'Jair marksman', plural: 'Jair marksmen', speed: 30, r: 4, mid: 8, top: 20, hp: 50, dmg: 40, range: 140, cd: 2.4, aggro: 146, shot: 'beam' },
   rider: { team: 'eng', draw: 'rider', charge: true, name: 'Ashenkogh rider', plural: 'Ashenkogh riders', speed: 52, r: 7, mid: 10, top: 26, hp: 190, dmg: 30, range: 18, cd: 0.9, aggro: 90 },
-  cturret: { team: 'eng', draw: 'turret', name: 'Captured turret', plural: 'Captured turrets', speed: 0, r: 8, mid: 6, top: 13, hp: 160, dmg: 20, range: 124, cd: 2.2, aggro: 124, shot: 'beam' },
+  cturret: { team: 'eng', draw: 'turret', name: 'Captured turret', plural: 'Captured turrets', speed: 0, r: 8, mid: 6, top: 13, hp: 400, dmg: 24, range: 124, cd: 2.0, aggro: 124, shot: 'beam' },
   station: { team: 'eng', draw: 'station', name: 'Jair tower', plural: 'Jair towers', speed: 0, r: 13, mid: 14, top: 36, hp: 3000, dmg: 0, range: 0, cd: 1, aggro: 0 },
   wers: { team: 'wers', draw: 'wers', name: 'Wersgor', plural: 'Wersgorix', speed: 22, r: 4, mid: 6, top: 16, hp: 70, dmg: 28, range: 108, cd: 1.8, aggro: 1e6, shot: 'beam' },
   wtank: { team: 'wers', draw: 'car', name: 'Ground car', plural: 'Ground cars', speed: 18, r: 9, mid: 7, top: 19, hp: 260, dmg: 30, range: 118, cd: 2.0, aggro: 1e6, shot: 'beam' },

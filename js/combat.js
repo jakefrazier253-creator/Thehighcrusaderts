@@ -22,23 +22,30 @@ function orderMove(wx, wy) {
     if (path === null) continue;
     best.path = path.map(tilePt);
     if (!best.path.length) best.path.push(g);
-    best.pi = 0; best.target = null; best.order = 'move';
+    best.pi = 0; best.target = null; best.order = 'move'; best.post = null;
   }
   const m = tilePt(slots[0]);
   marks.push({ x: m.x, y: m.y, age: 0, foe: false });
 }
 function orderAttack(t) {
-  for (const u of sel) { u.target = t; u.order = 'attack'; u.repath = 0; u.path = null; }
+  for (const u of sel) { u.target = t; u.order = 'attack'; u.repath = 0; u.path = null; u.post = null; }
   marks.push({ x: t.x, y: t.y, age: 0, foe: true });
 }
 
 // ---------- Combat ----------
+// Remember where one of your men was standing before he went off to fight on his own initiative.
+function keepPost(u) { if (u.team === 'eng' && u.type.speed && u.post == null) u.post = tileOf(u); }
 function hit(t, dmg, src) {
   if (t.hp <= 0) return;
   t.hp -= dmg; t.hurt = 0.12;
+  // Your men stand together: when one is hit, idle comrades close by go for the attacker.
+  if (t.team === 'eng' && src && src.hp > 0) for (const o of units) {
+    if (o === t || o.team !== 'eng' || o.hp <= 0 || o.target || o.order === 'move' || !o.type.dmg || !o.type.speed) continue;
+    if ((o.x - t.x) ** 2 + (o.y - t.y) ** 2 < 130 * 130) { keepPost(o); o.target = src; o.order = 'auto'; o.repath = 0; }
+  }
   if (t.hp <= 0) { fx.push({ k: 'fall', x: t.x, y: t.y, foe: t.team === 'wers', age: 0, life: 3 }); return; }
   // A soldier who is shot at while standing idle answers back.
-  if (!t.target && t.type.dmg && t.order !== 'move' && src && src.hp > 0) { t.target = src; t.order = 'auto'; }
+  if (!t.target && t.type.dmg && t.order !== 'move' && src && src.hp > 0) { keepPost(t); t.target = src; t.order = 'auto'; }
 }
 function strike(u, t) {
   u.cool = u.type.cd;
@@ -73,9 +80,17 @@ function think(u, dt) {
       const d = (o.x - u.x) ** 2 + (o.y - u.y) ** 2;
       if (d < bd) { bd = d; best = o; }
     }
-    if (best) { u.target = best; u.order = 'auto'; u.repath = 0; }
+    if (best) { keepPost(u); u.target = best; u.order = 'auto'; u.repath = 0; }
   }
-  if (!u.target) return;
+  if (!u.target) {
+    // A soldier who left his place to answer an attack walks back to it once the fight is over.
+    if (u.post != null && u.order !== 'move' && !u.path) {
+      const p = tileOf(u) === u.post ? null : findPath(tileOf(u), u.post);
+      if (p && p.length) { u.path = p.map(tilePt); u.pi = 0; u.order = 'return'; }
+      else { u.post = null; u.order = null; }
+    }
+    return;
+  }
   const dx = u.target.x - u.x, d = Math.hypot(dx, u.target.y - u.y);
   if (d <= u.type.range) {
     u.path = null;
