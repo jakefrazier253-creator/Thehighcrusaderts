@@ -30,7 +30,7 @@ async function pushCloud() {
   if (saveDirty) { saveDirty = false; pushCloud(); }
 }
 function saveGame(pageName) {
-  latestSave = { v: 1, page: pageName, mission, roster: cleanRoster(camp.roster), entry: cleanRoster(entryRoster), spoils: camp.spoils, allies: { ...camp.allies }, cars: camp.cars, base: campBase ? { ...campBase } : null, at: Date.now() };
+  latestSave = { v: 1, rev: 2, page: pageName, mission, roster: cleanRoster(camp.roster), entry: cleanRoster(entryRoster), spoils: camp.spoils, allies: { ...camp.allies }, cars: camp.cars, base: campBase ? { ...campBase } : null, at: Date.now() };
   try { localStorage.setItem(SAVE_KEY, JSON.stringify(latestSave)); savedLocal = true; } catch (e) { savedLocal = false; }
   pushCloud();
   renderSaveNote();
@@ -48,7 +48,15 @@ function resume(s) {
     ? { page: b.page, mission: b.mission, entry: cleanRoster(b.entry), roster: cleanRoster(b.roster), spoils: clamp(Math.floor(Number(b.spoils) || 0), 0, 99), note: '' }
     : null;
   latestSave = s;
+  // Saves made before the Ganturath reward was raised get the difference added once.
+  const owed = !(s.rev >= 2) && campBase && campBase.page === 'ganturath' ? 4 : 0;
+  if (owed) {
+    camp.spoils = Math.min(99, camp.spoils + owed);
+    campBase.spoils = Math.min(99, campBase.spoils + owed);
+    camp.note = campBase.note = 'Four more crates have turned up in the storehouses of Ganturath.';
+  }
   showCouncil(s.page);
+  if (owed) saveGame(s.page);
 }
 function renderSaveNote() {
   const el = document.getElementById('c-save');

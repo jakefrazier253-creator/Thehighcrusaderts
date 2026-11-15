@@ -6,7 +6,7 @@ const W = [2, 25], E = [69, 25], NO = [48, 2], SO = [56, 45];
 const MISSIONS = [
   { id: 'ansby', theme: 'earth', where: 'Ansby, Lincolnshire, Anno Domini 1345', spoils: 4,
     lostTitle: 'The muster is broken', lostText: 'The fire-weapons were too much. Gather your men and strike all at once next time.', wonLine: 'The ship is taken.' },
-  { id: 'ganturath', theme: 'tharixan', where: 'Ganturath, on the world Tharixan', spoils: 6, win: 'all',
+  { id: 'ganturath', theme: 'tharixan', where: 'Ganturath, on the world Tharixan', spoils: 10, win: 'all',
     lead: 'Storm Ganturath.', line: (n) => n + (n === 1 ? ' defender holds' : ' defenders hold') + ' the fortress. The turrets outreach your bows.',
     lostTitle: 'The assault fails', lostText: 'The turrets cut your men down in the open. Bring them through a gate together, and silence one turret at a time.', wonLine: 'Ganturath is yours.' },
   { id: 'siege', theme: 'tharixan', where: 'Ganturath, besieged', spoils: 7, win: 'all',
