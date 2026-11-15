@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The High Crusade</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Alegreya+Sans:wght@400;500;700&display=swap">
+<style>
+/* Page basics that the Claude artifact viewer normally supplies. */
+html { box-sizing: border-box; padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+[hidden] { display: none !important; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="game">
+  <canvas id="view" aria-label="Battlefield at Ansby"></canvas>
+
+  <div class="bar top">
+    <div class="plate">
+      <h1>The High Crusade</h1>
+      <p class="where" id="where">Ansby, Lincolnshire, Anno Domini 1345</p>
+      <p class="goal" id="goal"><b>Muster.</b> A strange ship has landed in the east meadow. March your men to it.</p>
+    </div>
+    <div class="tools">
+      <button type="button" id="zoom-out" aria-label="Zoom out">&minus;</button>
+      <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
+      <button type="button" id="help-open" aria-label="How to play">?</button>
+    </div>
+  </div>
+
+  <div id="toast" hidden></div>
+
+  <div id="help" hidden>
+    <h2>How to command</h2>
+    <h3>With a mouse</h3>
+    <ul>
+      <li>Click a soldier to select him. Hold Shift to add more.</li>
+      <li>Drag a box to select a group.</li>
+      <li>Double click to select every soldier of that kind in view.</li>
+      <li>Click or right click the ground to march there.</li>
+      <li>Click or right click an enemy to attack it.</li>
+      <li>Move the view with the arrow keys, the screen edges, or the small map.</li>
+      <li>Scroll to zoom.</li>
+    </ul>
+    <h3>With touch</h3>
+    <ul>
+      <li>Tap a soldier to select him.</li>
+      <li>Press and hold, then drag, to box a group.</li>
+      <li>Double tap to select every soldier of that kind in view.</li>
+      <li>Tap the ground to march there. Tap an enemy to attack it.</li>
+      <li>Drag with one finger to move the view. Pinch to zoom.</li>
+    </ul>
+    <button type="button" class="close" id="help-close">Back to the field</button>
+  </div>
+
+  <div id="end" hidden>
+    <h2 id="end-title"></h2>
+    <p id="end-text"></p>
+    <button type="button" id="again">Try again with the same men</button>
+    <button type="button" id="back" hidden>Back to the council</button>
+  </div>
+
+  <div id="council" hidden>
+    <div class="sheet">
+      <p class="eyebrow" id="c-eyebrow"></p>
+      <h2 id="c-title"></h2>
+      <div id="c-story"></div>
+      <div id="c-camp">
+        <h3>Muster roll</h3>
+        <ul id="c-roster"></ul>
+        <p id="c-note" hidden></p>
+        <h3>Spoils</h3>
+        <p id="c-spoils"></p>
+        <div id="c-offers"></div>
+      </div>
+      <div class="go">
+        <button type="button" id="c-next"></button>
+        <button type="button" id="c-alt" hidden></button>
+        <button type="button" id="c-continue" hidden></button>
+        <button type="button" id="c-again">Fight this battle again</button>
+      </div>
+      <p id="c-save" hidden></p>
+    </div>
+  </div>
+
+  <div class="bar bottom">
+    <div class="muster">
+      <p class="hint" id="hint"></p>
+      <div id="chips"></div>
+      <button type="button" id="sel-all">Select all</button>
+      <button type="button" id="sel-clear" hidden>Clear</button>
+    </div>
+    <canvas id="mini" width="216" height="144" aria-label="Map of Ansby"></canvas>
+  </div>
+</div>
+
+<script src="js/world.js"></script>
+<script src="js/paint.js"></script>
+<script src="js/units.js"></script>
+<script src="js/view.js"></script>
+<script src="js/combat.js"></script>
+<script src="js/missions.js"></script>
+<script src="js/sim.js"></script>
+<script src="js/draw.js"></script>
+<script src="js/input.js"></script>
+<script src="js/campaign.js"></script>
+<script src="js/save.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

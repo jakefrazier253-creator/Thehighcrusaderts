@@ -1,0 +1,149 @@
+/* Layout: a full-bleed battlefield canvas. Heraldic HUD strips float over its top and bottom edges. */
+:root {
+  --ink: #10171a;
+  --panel: rgba(14, 21, 24, 0.88);
+  --line: #3b4c4d;
+  --or: #e2b23c;
+  --gules: #b8392f;
+  --vellum: #ece5d2;
+  --mute: #9fada8;
+  --display: 'Pirata One', 'Old English Text MT', Georgia, serif;
+  --ui: 'Alegreya Sans', 'Trebuchet MS', Verdana, sans-serif;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  background: var(--ink);
+  color: var(--vellum);
+  font-family: var(--ui);
+  font-size: 15px;
+  line-height: 1.3;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+#game { position: relative; height: 100%; overflow: hidden; background: var(--ink); }
+#view { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+
+.bar {
+  position: absolute; left: 0; right: 0;
+  display: flex; gap: 10px; justify-content: space-between;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  pointer-events: none;
+}
+.bar > * { pointer-events: auto; }
+.bar.top { top: 0; padding-block: 10px 0; align-items: flex-start; }
+.bar.bottom { bottom: 0; padding-block: 0 10px; align-items: flex-end; }
+
+.plate {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--or);
+  border-radius: 3px;
+  padding: 6px 12px 8px;
+  min-width: 0;
+  max-width: 420px;
+}
+.plate h1 {
+  margin: 0; font-family: var(--display); font-weight: 400;
+  font-size: 26px; line-height: 1; color: var(--or); letter-spacing: 0.01em;
+}
+.plate .where {
+  margin: 3px 0 0; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.09em; color: var(--mute);
+}
+.plate .goal { margin: 6px 0 0; font-size: 14px; }
+.plate .goal b { color: var(--or); font-weight: 700; }
+
+.tools { display: flex; gap: 6px; flex: none; }
+button {
+  font: 700 15px/1 var(--ui); color: var(--vellum);
+  background: var(--panel); border: 1px solid var(--line); border-radius: 3px;
+  min-height: 40px; padding: 0 12px; cursor: pointer; touch-action: manipulation;
+}
+button:hover { border-color: var(--or); }
+button:active { background: #24312f; }
+button:focus-visible { outline: 2px solid var(--or); outline-offset: 2px; }
+.tools button { width: 40px; padding: 0; font-size: 20px; }
+
+.muster {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 3px;
+  padding: 8px; min-width: 0; flex: 0 1 auto;
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.muster .hint { margin: 0 4px; color: var(--mute); font-size: 14px; }
+#chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border-color: var(--or); font-weight: 500; }
+.chip b { color: var(--or); font-size: 17px; margin-right: 3px; }
+
+#mini {
+  flex: none; width: 150px; height: 100px; display: block;
+  border: 1px solid var(--line); border-radius: 3px; background: var(--ink);
+  touch-action: none; cursor: pointer; image-rendering: pixelated;
+}
+
+#help, #end {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(540px, calc(100% - 32px)); max-height: 78%; overflow: auto;
+  background: var(--panel); border: 1px solid var(--line); border-top: 2px solid var(--or);
+  border-radius: 3px; padding: 14px 18px 16px;
+}
+#help h2, #end h2 { margin: 0 0 8px; font-family: var(--display); font-weight: 400; font-size: 22px; color: var(--or); }
+#help h3 { margin: 12px 0 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.09em; color: var(--mute); }
+#help ul { margin: 0; padding-left: 18px; }
+#help li { margin: 3px 0; }
+#help .close { margin-top: 14px; }
+#end { text-align: center; width: min(420px, calc(100% - 32px)); }
+#end p { margin: 0 0 14px; }
+#end button { margin: 0 3px 6px; }
+
+#council {
+  position: absolute; inset: 0; z-index: 5; overflow: auto;
+  background: rgba(9, 14, 16, 0.93);
+  padding-block: 20px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+#council .sheet {
+  max-width: 600px; margin: 0 auto;
+  background: var(--panel); border: 1px solid var(--line); border-top: 2px solid var(--or);
+  border-radius: 3px; padding: 18px 22px 20px;
+}
+#council .eyebrow, #council h3 {
+  margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.09em; color: var(--mute);
+}
+#council h2 { margin: 4px 0 10px; font-family: var(--display); font-weight: 400; font-size: 30px; line-height: 1.05; color: var(--or); text-wrap: balance; }
+#c-story p { margin: 0 0 10px; font-size: 17px; line-height: 1.45; max-width: 62ch; }
+#council h3 { margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--line); }
+#c-roster { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 16px; }
+#c-roster b, #c-spoils { color: var(--or); }
+#c-roster b { font-size: 19px; font-variant-numeric: tabular-nums; }
+#c-spoils { margin: 8px 0; font-weight: 700; font-size: 16px; }
+#c-offers { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 8px; }
+.offer { display: flex; flex-direction: column; gap: 4px; text-align: left; padding: 9px 12px; min-width: 0; }
+.offer-head { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.offer-head b { color: var(--or); font-weight: 700; white-space: nowrap; }
+.offer-note { font-weight: 400; font-size: 13px; line-height: 1.3; color: var(--mute); }
+button:disabled { opacity: 0.45; cursor: default; border-color: var(--line); }
+#council .go { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+#c-next, #c-alt { border-color: var(--or); }
+#c-note { margin: 8px 0 0; font-size: 14px; color: var(--mute); }
+#c-save { margin: 12px 0 0; font-size: 13px; color: var(--mute); }
+
+#toast {
+  position: absolute; left: 50%; bottom: 132px; transform: translateX(-50%);
+  width: max-content; max-width: calc(100% - 32px);
+  background: var(--gules); color: #fff3e2; border-radius: 3px;
+  padding: 8px 14px; font-weight: 700; text-align: center; pointer-events: none;
+}
+
+@media (max-width: 560px), (max-height: 430px) {
+  .plate h1 { font-size: 20px; }
+  .plate .where { display: none; }
+  .plate .goal { font-size: 13px; margin-top: 4px; }
+  #mini { width: 114px; height: 76px; }
+  #toast { bottom: 108px; }
+}
