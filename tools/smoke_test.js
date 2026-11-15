@@ -10,7 +10,7 @@ function el(id) {
     addEventListener(type, fn) { (handlers[id + ':' + type] = handlers[id + ':' + type] || []).push(fn); },
     getBoundingClientRect: () => ({ left: 0, top: 0, width: 800, height: 450 }),
     getContext: () => new Proxy({}, { get: (t, p) => (p in t ? t[p] : noop), set: (t, p, v) => { t[p] = v; return true; } }),
-    append: noop, setPointerCapture: noop };
+    append: noop, setPointerCapture: noop, setAttribute: noop };
   return base;
 }
 const els = {};
@@ -39,6 +39,13 @@ for (let n = 0; n < run('MISSIONS.length'); n++) {
   frames(900);
   console.log(run('MISSIONS[mission].id').padEnd(10), 'phase', run('phase'), 'units', run('units.length'));
 }
-for (const key of ['again:click', 'back:click', 'sel-all:click', 'sel-clear:click', 'zoom-in:click', 'help-open:click']) for (const h of handlers[key] || []) h({});
+for (const key of ['again:click', 'back:click', 't-clear:click', 't-leave:click', 'quit:click', 'sel-all:click', 'sel-clear:click', 'zoom-in:click', 'help-open:click']) for (const h of handlers[key] || []) h({});
+// Every tourney combination: both opponents, all three kinds of fight, every ground.
+for (const foe of ['wers', 'earth']) for (const mode of ['field', 'attack', 'defend']) for (const ground of ['earth', 'tharixan', 'boda', 'steppe']) {
+  run(`setTourney({ foe: '${foe}', mode: '${mode}', ground: '${ground}', level: 'hard', army: { maa: 4, bow: 2, gun: 2, knight: 2, jair: 2, rider: 1, car: 1, sknight: 1 } }); showTourney(); startTourney();`);
+  run(`for (const u of units) if (u.team === 'eng' && u.type.speed) sel.add(u); { const f = units.find((u) => u.team === 'wers'); if (f) orderAttack(f); }`);
+  frames(mode === 'defend' ? 6200 : 600);
+}
+console.log('tourney    ', 'last phase', run('phase'));
 frames(5);
 console.log('smoke test passed:', order.length, 'scripts loaded');

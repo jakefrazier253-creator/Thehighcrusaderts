@@ -176,6 +176,6 @@ document.getElementById('zoom-out').addEventListener('click', () => zoomAt(cssW 
 document.getElementById('help-open').addEventListener('click', () => { helpEl.hidden = !helpEl.hidden; });
 document.getElementById('help-close').addEventListener('click', () => { helpEl.hidden = true; });
 document.getElementById('again').addEventListener('click', () => startMission(mission));
-document.getElementById('back').addEventListener('click', () => backToCouncil());
+document.getElementById('back').addEventListener('click', () => (MISSIONS[mission].tourney ? showTourney() : backToCouncil()));
 allBtn.addEventListener('click', () => { for (const u of units) if (u.team === 'eng' && u.type.speed) sel.add(u); refreshHUD(); });
 clearBtn.addEventListener('click', () => { sel.clear(); refreshHUD(); });

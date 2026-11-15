@@ -32,6 +32,10 @@ Seven battles, linked by Brother Parvus's chronicle and a council screen where s
 6. (the other ally)
 7. The citadel: bring down Governor Huruga
 
+## The tourney
+
+An open battle you set up yourself, available from the title page. Pick the opponent (the Wersgorix or the Earth expedition), the kind of fight (open field, storm a fort, or hold the pavilion against five companies), the ground, the odds, and a company bought with 40 marks. It has its own units on both sides and does not affect the campaign.
+
 ## How the code is laid out
 
 There is no build step and no game engine. All art is drawn by code.
@@ -50,6 +54,7 @@ There is no build step and no game engine. All art is drawn by code.
 | `js/draw.js` | Draws one frame |
 | `js/input.js` | Mouse, touch, keyboard, buttons |
 | `js/campaign.js` | Story pages, council, purchases, ally choice |
+| `js/tourney.js` | The tourney: setup screen, opposing companies, grounds |
 | `js/save.js` | Saving and resuming |
 | `js/main.js` | Starts the game |
 

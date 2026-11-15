@@ -45,7 +45,7 @@ function update(dt) {
     const s = shots[i];
     if (s.t.hp <= 0) { shots.splice(i, 1); continue; }
     const tx = s.t.x, ty = s.t.y - s.t.type.mid, dx = tx - s.x, dy = ty - s.y, d = Math.hypot(dx, dy), stepLen = 240 * dt;
-    if (d <= stepLen) { hit(s.t, s.dmg, s.src); shots.splice(i, 1); }
+    if (d <= stepLen) { hit(s.t, s.dmg, s.src, true); shots.splice(i, 1); }
     else { s.x += (dx / d) * stepLen; s.y += (dy / d) * stepLen; s.dx = dx / d; s.dy = dy / d; }
   }
   // Clear the fallen from the field.

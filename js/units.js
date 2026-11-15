@@ -10,13 +10,24 @@ const TYPES = {
   car: { team: 'eng', draw: 'car', name: 'Ground car', plural: 'Ground cars', speed: 18, r: 9, mid: 7, top: 19, hp: 260, dmg: 30, range: 118, cd: 2.0, aggro: 124, shot: 'beam' },
   jair: { team: 'eng', draw: 'jair', name: 'Jair marksman', plural: 'Jair marksmen', speed: 30, r: 4, mid: 8, top: 20, hp: 50, dmg: 40, range: 140, cd: 2.4, aggro: 146, shot: 'beam' },
   rider: { team: 'eng', draw: 'rider', charge: true, name: 'Ashenkogh rider', plural: 'Ashenkogh riders', speed: 52, r: 7, mid: 10, top: 26, hp: 190, dmg: 30, range: 18, cd: 0.9, aggro: 90 },
+  sknight: { team: 'eng', draw: 'knight', star: true, charge: true, name: 'Star knight', plural: 'Star knights', speed: 50, r: 7, mid: 9, top: 28, hp: 230, dmg: 32, range: 17, cd: 0.9, aggro: 90 },
   cturret: { team: 'eng', draw: 'turret', name: 'Captured turret', plural: 'Captured turrets', speed: 0, r: 8, mid: 6, top: 13, hp: 400, dmg: 24, range: 124, cd: 2.0, aggro: 124, shot: 'beam' },
   station: { team: 'eng', draw: 'station', name: 'Jair tower', plural: 'Jair towers', speed: 0, r: 13, mid: 14, top: 36, hp: 3000, dmg: 0, range: 0, cd: 1, aggro: 0 },
+  pavilion: { team: 'eng', draw: 'pavilion', name: 'Royal pavilion', plural: 'Royal pavilions', speed: 0, r: 15, mid: 12, top: 38, hp: 2600, dmg: 0, range: 0, cd: 1, aggro: 0 },
   wers: { team: 'wers', draw: 'wers', name: 'Wersgor', plural: 'Wersgorix', speed: 22, r: 4, mid: 6, top: 16, hp: 70, dmg: 28, range: 108, cd: 1.8, aggro: 1e6, shot: 'beam' },
   wtank: { team: 'wers', draw: 'car', name: 'Ground car', plural: 'Ground cars', speed: 18, r: 9, mid: 7, top: 19, hp: 260, dmg: 30, range: 118, cd: 2.0, aggro: 1e6, shot: 'beam' },
   turret: { team: 'wers', draw: 'turret', name: 'Turret', plural: 'Turrets', speed: 0, r: 8, mid: 6, top: 13, hp: 160, dmg: 20, range: 124, cd: 2.2, aggro: 124, shot: 'beam' },
   huruga: { team: 'wers', draw: 'wers', boss: true, name: 'Huruga', plural: 'Huruga', speed: 20, r: 6, mid: 8, top: 22, hp: 420, dmg: 36, range: 112, cd: 1.4, aggro: 140, shot: 'beam' },
-  arsenal: { team: 'wers', draw: 'arsenal', name: 'Arsenal', plural: 'Arsenals', speed: 0, r: 15, mid: 12, top: 30, hp: 400, dmg: 0, range: 0, cd: 1, aggro: 0 }
+  arsenal: { team: 'wers', draw: 'arsenal', name: 'Arsenal', plural: 'Arsenals', speed: 0, r: 15, mid: 12, top: 30, hp: 400, dmg: 0, range: 0, cd: 1, aggro: 0 },
+  // Tourney only. A force shield turns most of a shot aside, but does nothing against a blade.
+  wshield: { team: 'wers', draw: 'wers', shield: true, name: 'Shield trooper', plural: 'Shield troopers', speed: 20, r: 5, mid: 6, top: 17, hp: 100, dmg: 28, range: 100, cd: 1.8, aggro: 1e6, shot: 'beam' },
+  wbanner: { team: 'wers', draw: 'banner', name: 'Wersgor standard', plural: 'Wersgor standards', speed: 0, r: 10, mid: 14, top: 38, hp: 420, dmg: 0, range: 0, cd: 1, aggro: 0 },
+  // The Earth expedition. They fight on the enemy side of the lists, so they share its team.
+  rifle: { team: 'wers', draw: 'earth', name: 'Rifleman', plural: 'Riflemen', speed: 26, r: 4, mid: 6, top: 17, hp: 70, dmg: 9, range: 108, cd: 0.45, aggro: 1e6, shot: 'beam', tint: [255, 214, 120] },
+  drone: { team: 'wers', draw: 'drone', hunts: true, name: 'Scout drone', plural: 'Scout drones', speed: 58, r: 5, mid: 13, top: 21, hp: 46, dmg: 8, range: 70, cd: 0.5, aggro: 1e6, shot: 'beam', tint: [255, 214, 120] },
+  hover: { team: 'wers', draw: 'hover', name: 'Hover tank', plural: 'Hover tanks', speed: 26, r: 10, mid: 8, top: 20, hp: 300, dmg: 34, range: 120, cd: 2.0, aggro: 1e6, shot: 'beam', tint: [255, 214, 120] },
+  egun: { team: 'wers', draw: 'turret', earth: true, name: 'Sentry gun', plural: 'Sentry guns', speed: 0, r: 8, mid: 6, top: 13, hp: 160, dmg: 20, range: 124, cd: 2.2, aggro: 124, shot: 'beam', tint: [255, 214, 120] },
+  ebanner: { team: 'wers', draw: 'banner', earth: true, name: 'Expedition standard', plural: 'Expedition standards', speed: 0, r: 10, mid: 14, top: 38, hp: 420, dmg: 0, range: 0, cd: 1, aggro: 0 }
 };
 const units = [], shots = [], fx = [], marks = [];
 const sel = new Set();
@@ -64,6 +75,13 @@ function drawUnit(ctx, u, s) {
     px('#ece5d2', -2, -14 + bob, 4, 5); px('#b8392f', -1, -13 + bob, 2, 3);
     px('#c9cdd2', -2, -17 + bob, 4, 3); px('#2a2c33', 0, -16 + bob, 2, 1);
     px('#6b5334', 3, -24 + bob, 1, 16); px('#e2b23c', 4, -24 + bob, 4, 2);
+    if (ty.star) {
+      // A knight of the later realm: silvered plate, a blue caparison, and a lance that glows.
+      px('#3a5fa8', -4, -9 + bob, 8, 4); px('#f2c955', -4, -6 + bob, 8, 1);
+      px('#dfe9f2', -2, -14 + bob, 4, 5); px('#3a5fa8', -1, -13 + bob, 2, 3);
+      px('#f4f6fb', -2, -17 + bob, 4, 3); px('#2a2c33', 0, -16 + bob, 2, 1);
+      px('#c9cdd2', 3, -24 + bob, 1, 16); px('#8ff0e0', 3, -28 + bob, 1, 5); px('#3a5fa8', 4, -24 + bob, 4, 2);
+    }
   } else if (d === 'rider') {
     // An Ashenkogh: four legs, an upright trunk, and a long spear.
     px('rgba(0,0,0,0.28)', -7, -1, 14, 2);
@@ -82,7 +100,8 @@ function drawUnit(ctx, u, s) {
     px('#59626b', -6, -7, 12, 5);
     px('#8f9aa5', -5, -10, 10, 4); px('#b7c3ce', -3, -11, 6, 2);
     px('#3a4249', 4, -9, 8, 2);
-    px(eng ? '#e2b23c' : '#ff5a47', -1, -8, 2, 2);
+    px(eng ? '#e2b23c' : ty.earth ? '#7fb2ff' : '#ff5a47', -1, -8, 2, 2);
+    if (ty.earth) { px('#3d2b1b', -6, -18, 1, 9); px('#f4f6fb', -5, -18, 5, 3); px('#3a6fd0', -5, -17, 5, 1); }
     if (eng) { px('#3d2b1b', -6, -18, 1, 9); px('#b8392f', -5, -18, 5, 3); }
     if (fired) px('#8ff0e0', 12, -10, 2, 4);
   } else if (d === 'car') {
@@ -117,6 +136,38 @@ function drawUnit(ctx, u, s) {
     px('#f2a0d0', -2, -18 + bob, 4, 2);
     px('#c9cdd2', 3, -10 + bob, 8, 1); px('#c9cdd2', 3, -9 + bob, 1, 2);
     if (fired) px('#d9b8ff', 11, -11 + bob, 2, 3);
+  } else if (d === 'earth') {
+    px('rgba(0,0,0,0.28)', -4, -1, 8, 2);
+    px('#3b4252', -2, -3, 1, step ? 2 : 3); px('#3b4252', 1, -3, 1, u.moving && !step ? 2 : 3);
+    px('#d5d9e0', -3, -8 + bob, 6, 5); px('#3a6fd0', -3, -5 + bob, 6, 1);
+    px('#f4f6fb', -2, -12 + bob, 4, 4); px('#22303f', 0, -11 + bob, 3, 2);
+    px('#2a2c33', 2, -7 + bob, 7, 1); px('#2a2c33', 2, -6 + bob, 1, 2);
+    if (fired) px('#ffd678', 9, -8 + bob, 2, 2);
+  } else if (d === 'drone') {
+    px('rgba(0,0,0,0.2)', -3, -1, 6, 2);
+    px('#9aa3b0', -7, -18 + bob, 14, 1);
+    px('#dfe5ee', -4, -16 + bob, 8, 4); px('#3a6fd0', -4, -14 + bob, 8, 1);
+    px('#22303f', 2, -15 + bob, 2, 2);
+    if (fired) px('#ffd678', 5, -14 + bob, 2, 2);
+  } else if (d === 'hover') {
+    px('rgba(0,0,0,0.25)', -10, 0, 20, 2);
+    px('rgba(127,178,255,0.4)', -8, -3, 16, 2); px('#7fb2ff', -9, -4, 18, 1);
+    px('#e8ecf2', -10, -11, 20, 7); px('#3a6fd0', -10, -8, 20, 1); px('#b9c2cf', -10, -5, 20, 1);
+    px('#cfd6e0', -4, -15, 9, 4); px('#f8fafc', -3, -15, 6, 1);
+    px('#4a525e', 4, -14, 10, 2);
+    if (fired) px('#ffd678', 14, -15, 2, 4);
+  } else if (d === 'pavilion') {
+    px('rgba(0,0,0,0.3)', -16, -2, 32, 5);
+    for (let i = 0; i < 6; i++) px(i % 2 ? '#ece5d2' : '#b8392f', -15 + i * 5, -14, 5, 13);
+    px('#2a2018', -3, -10, 6, 9);
+    px('#e2b23c', -16, -17, 32, 3); px('#b8392f', -13, -21, 26, 4); px('#ece5d2', -9, -25, 18, 4); px('#b8392f', -5, -29, 10, 4);
+    px('#3d2b1b', 0, -38, 1, 9); px('#e2b23c', 1, -38, 6, 3);
+  } else if (d === 'banner') {
+    const c = ty.earth ? ['#f4f6fb', '#3a6fd0'] : ['#2c3440', '#8ff0e0'];
+    px('rgba(0,0,0,0.3)', -8, -1, 16, 3);
+    px('#59626b', -6, -4, 12, 4);
+    px('#3d2b1b', -1, -36, 2, 33); px('#e2b23c', -2, -38, 4, 2);
+    px(c[0], 1, -36, 16, 11); px(c[1], 1, -34, 16, 2); px(c[1], 1, -29, 16, 2);
   } else if (d === 'wers') {
     if (ty.boss) ctx.scale(1.4, 1.4);
     px('rgba(0,0,0,0.28)', -4, -1, 8, 2);
@@ -129,6 +180,11 @@ function drawUnit(ctx, u, s) {
     if (ty.boss) px('#e2b23c', -2, -13 + bob, 4, 1);
     px('#c9cdd2', 3, -7 + bob, 4, 1); px('#c9cdd2', 3, -6 + bob, 1, 2);
     if (fired) px('#8ff0e0', 7, -8 + bob, 2, 3);
+    if (ty.shield) {
+      px('#e2b23c', -3, -9 + bob, 6, 1);
+      ctx.strokeStyle = 'rgba(143,240,224,0.85)'; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.ellipse(4, -7 + bob, 4, 9, 0, -1.25, 1.25); ctx.stroke();
+    }
   } else {
     px('rgba(0,0,0,0.28)', -4, -1, 8, 2);
     px('#2b2a28', -2, -3, 1, step ? 2 : 3); px('#2b2a28', 1, -3, 1, u.moving && !step ? 2 : 3);

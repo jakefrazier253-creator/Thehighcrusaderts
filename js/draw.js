@@ -39,7 +39,8 @@ function draw() {
   for (const f of fx) {
     const k = 1 - f.age / f.life;
     if (f.k === 'beam') {
-      ctx.strokeStyle = 'rgba(143,240,224,' + (0.4 * k).toFixed(3) + ')'; ctx.lineWidth = 4;
+      const c = f.c || [143, 240, 224];
+      ctx.strokeStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + (0.4 * k).toFixed(3) + ')'; ctx.lineWidth = f.c ? 2.5 : 4;
       ctx.beginPath(); ctx.moveTo(f.x0, f.y0); ctx.lineTo(f.x1, f.y1); ctx.stroke();
       ctx.strokeStyle = 'rgba(235,255,250,' + k.toFixed(3) + ')'; ctx.lineWidth = 1.4;
       ctx.beginPath(); ctx.moveTo(f.x0, f.y0); ctx.lineTo(f.x1, f.y1); ctx.stroke();

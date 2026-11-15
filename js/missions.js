@@ -33,7 +33,8 @@ const MISSIONS = [
     lead: 'Take the citadel.', line: () => 'Cut your way to the inner keep and bring down Governor Huruga.',
     lostTitle: 'The citadel holds', lostText: 'Two walls and a great many guns. Take the outer yard a piece at a time before you try the keep.', wonLine: 'Tharixan is yours.' }
 ];
-const ARMY_KINDS = ['knight', 'maa', 'bow', 'gun', 'car', 'jair', 'rider'];
+const CAMPAIGN_LEN = MISSIONS.length;
+const ARMY_KINDS = ['knight', 'maa', 'bow', 'gun', 'car', 'jair', 'rider', 'sknight'];
 const ANSBY_ROSTER = { knight: 4, maa: 6, bow: 6 };
 let mission = 0, entryRoster = { ...ANSBY_ROSTER }, entrySize = 16, clock = 0, waveQ = [];
 const goalEl = document.getElementById('goal'), toastEl = document.getElementById('toast'), whereEl = document.getElementById('where');
@@ -68,7 +69,10 @@ function startMission(n, roster) {
   const list = [];
   for (const k of ARMY_KINDS) for (let i = 0; i < (entryRoster[k] || 0); i++) list.push(k);
   entrySize = list.length;
-  const spots = openTilesNear(idx(SPAWN.x, SPAWN.y), list.length);
+  // Form up on every other tile, so there is room between the men.
+  const near = openTilesNear(idx(SPAWN.x, SPAWN.y), list.length * 2 + 8);
+  const loose = near.filter((t) => ((t % MW) + ((t / MW) | 0)) % 2 === 0);
+  const spots = loose.length >= list.length ? loose : near;
   list.forEach((kind, i) => { if (spots[i] !== undefined) units.push(makeUnit(kind, spots[i])); });
   for (const f of FOES) {
     const u = makeUnit(f.kind, idx(f.x, f.y));
@@ -82,6 +86,7 @@ function startMission(n, roster) {
   if (n === 0) { phase = 'muster'; setGoal('Muster.', 'A strange ship has landed in the east meadow. March your men to it.'); }
   else phase = 'ambush';
   endEl.hidden = true; toastEl.hidden = true; councilEl.hidden = true;
+  document.getElementById('quit').hidden = !m.tourney;
   if (m.hint) toast(m.hint);
   cam.x = SPAWN.x * T + 40; cam.y = SPAWN.y * T;
   clampCam();
@@ -92,7 +97,11 @@ function endMission(won, standing) {
   phase = won ? 'won' : 'lost';
   waveQ = [];
   for (const u of units) { u.target = null; u.path = null; u.order = null; }
+  document.getElementById('quit').hidden = true;
+  if (m.tourney) { tourneyEnd(won, standing); return; }
   if (!won) {
+    document.getElementById('again').textContent = 'Try again with the same men';
+    document.getElementById('back').textContent = 'Back to the council';
     setGoal('Defeat.', m.lostTitle + '.');
     endTitle.textContent = m.lostTitle;
     endText.textContent = m.lostText;
@@ -128,7 +137,7 @@ function runMission(dt) {
   while (phase === 'ambush' && waveQ.length && waveQ[0].t <= clock) {
     const w = waveQ.shift();
     spawnAt(w.at[0], w.at[1], w.list);
-    toast(w.at === W ? 'Wersgorix on the west road.' : w.at === E ? 'Wersgorix from the east.' : w.at === NO ? 'Wersgorix from the north.' : 'Wersgorix at the south gate.');
+    toast((m.foes || 'Wersgorix') + (w.at === W ? (m.tourney ? ' from the west.' : ' on the west road.') : w.at === E ? ' from the east.' : w.at === NO ? ' from the north.' : ' at the south gate.'));
   }
   let eng = 0, foe = 0, goalUp = false, wardUp = false;
   for (const u of units) {

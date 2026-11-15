@@ -43,7 +43,8 @@ const STORY = {
       'In the year of grace 1345, Sir Roger, Baron de Tourneville, mustered his free companions in our village to follow King Edward into France. There were knights who had pawned their manors for a warhorse, yeomen who could split a willow wand at two hundred paces, and a great many men whose chief skill lay in drinking the baron’s ale. Ansby had not been so crowded, nor so loud, in living memory.',
       'Then, one fair morning, a ship came down out of a clear sky. It was a cylinder of bright metal, longer than our abbey church, and it settled in the east meadow as lightly as a goose upon a pond. Some called it a miracle and some a French trick. A door opened in its side. My lord, who has never in his life waited to be attacked, called for his horse.'
     ],
-    next: 'To arms', go: () => { councilEl.hidden = true; }
+    next: 'To arms', go: () => { councilEl.hidden = true; },
+    alt: 'The tourney (open battle)', altGo: () => showTourney()
   },
   ansby: {
     title: 'After the ambush', camp: true,
@@ -116,7 +117,17 @@ const STORY = {
       'I must set down plainly that we never found the way home. The charts that might have led us back to Earth were lost through a treachery I have not the heart to write of here. For a season that grieved us more than any battle. Then there was too much to do. There were allies to keep, and worlds to take, and a kingdom to make out of yeomen and Jairs and four-legged lords.',
       'Sir Roger is a king now, and I, God forgive the presumption, an archbishop. The abbey bell hangs in a cathedral whose windows look out upon two moons. Sometimes of an evening I think of the east meadow at Ansby, and the ship coming down upon it as lightly as a goose upon a pond, and I wonder what the creatures aboard supposed they had found. They had found Englishmen. I am sorry for them still.'
     ],
-    next: 'Begin a new campaign', go: () => { startMission(0); showCouncil('intro'); }, again: true
+    next: 'Read on', go: () => showCouncil('epilogue'), again: true
+  },
+  epilogue: {
+    title: 'A thousand years on', eyebrow: 'Added in a later hand',
+    text: [
+      'Here the chronicle of Brother Parvus ends. The copy before you was made many centuries afterward, and its most recent reader was a visitor: the captain of a ship out of Earth, the first to find its way across the gulf that the people of Ansby crossed by accident and could never cross again.',
+      'He had expected a great many things in the deep sky. He had not expected to be met by a duke in plate armor who spoke a kind of English, handed him this chronicle and a cup of ale, and asked after the health of the King of England. The captain explained, as gently as he could, that a good deal had changed at home, and that he held his own commission from the Israeli Empire. The duke was overjoyed. He had always been taught that the Holy Land would be set free one day, and it was good to hear the work was in hand.',
+      'There is to be a tourney in the visitors\u2019 honor, for that is how this realm has greeted strangers since Sir Roger\u2019s day. The Earthmen are invited to bring their own arms into the lists, and some Wersgor prisoners have been promised their freedom for a good showing. Nobody is to be killed, the heralds say. Nobody has ever quite believed the heralds.'
+    ],
+    next: 'To the tourney', go: () => showTourney(),
+    alt: 'Begin a new campaign', altGo: () => { startMission(0); showCouncil('intro'); }
   }
 };
 let page = 'intro';
@@ -157,7 +168,7 @@ const label = (v) => (typeof v === 'function' ? v() : v);
 function showCouncil(p) {
   page = p;
   const s = STORY[p];
-  document.getElementById('c-eyebrow').textContent = 'Brother Parvus records';
+  document.getElementById('c-eyebrow').textContent = s.eyebrow || 'Brother Parvus records';
   document.getElementById('c-title').textContent = s.title;
   const story = document.getElementById('c-story');
   story.textContent = '';

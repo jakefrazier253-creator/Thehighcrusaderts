@@ -12,8 +12,8 @@ function cleanRoster(r) {
   return out;
 }
 function validSave(s) {
-  return !!s && s.v === 1 && typeof s.page === 'string' && !!STORY[s.page] && s.page !== 'intro' &&
-    Number.isInteger(s.mission) && s.mission >= 0 && s.mission < MISSIONS.length && typeof s.roster === 'object' && typeof s.entry === 'object' &&
+  return !!s && s.v === 1 && typeof s.page === 'string' && !!STORY[s.page] && s.page !== 'intro' && s.page !== 'epilogue' &&
+    Number.isInteger(s.mission) && s.mission >= 0 && s.mission < CAMPAIGN_LEN && typeof s.roster === 'object' && typeof s.entry === 'object' &&
     typeof s.spoils === 'number' && typeof s.at === 'number';
 }
 function readLocal() {
@@ -44,7 +44,7 @@ function resume(s) {
   camp.cars = !!s.cars;
   camp.note = '';
   const b = s.base;
-  campBase = b && STORY[b.page] && STORY[b.page].camp && Number.isInteger(b.mission) && b.mission >= 0 && b.mission < MISSIONS.length
+  campBase = b && STORY[b.page] && STORY[b.page].camp && Number.isInteger(b.mission) && b.mission >= 0 && b.mission < CAMPAIGN_LEN
     ? { page: b.page, mission: b.mission, entry: cleanRoster(b.entry), roster: cleanRoster(b.roster), spoils: clamp(Math.floor(Number(b.spoils) || 0), 0, 99), note: '' }
     : null;
   latestSave = s;

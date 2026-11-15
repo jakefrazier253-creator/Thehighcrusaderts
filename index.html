@@ -24,6 +24,7 @@ body { margin: 0; }
       <p class="goal" id="goal"><b>Muster.</b> A strange ship has landed in the east meadow. March your men to it.</p>
     </div>
     <div class="tools">
+      <button type="button" id="quit" hidden>Quit</button>
       <button type="button" id="zoom-out" aria-label="Zoom out">&minus;</button>
       <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
       <button type="button" id="help-open" aria-label="How to play">?</button>
@@ -90,6 +91,31 @@ body { margin: 0; }
     </div>
   </div>
 
+  <div id="lists" hidden>
+    <div class="sheet">
+      <p class="eyebrow">The lists</p>
+      <h2>A passage of arms</h2>
+      <p class="blurb">The heralds will set the field as you command. Choose your opponents, the manner of the fight, and the company you bring.</p>
+      <h3>Opponent</h3>
+      <div class="seg" id="t-foe"></div>
+      <h3>Manner of fight</h3>
+      <div class="seg" id="t-mode"></div>
+      <p class="seg-note" id="t-mode-note"></p>
+      <h3>Ground</h3>
+      <div class="seg" id="t-ground"></div>
+      <h3>Odds</h3>
+      <div class="seg" id="t-level"></div>
+      <h3>Your company</h3>
+      <p id="t-purse"></p>
+      <div id="t-army"></div>
+      <div class="go">
+        <button type="button" id="t-start">Sound the trumpets</button>
+        <button type="button" id="t-clear">Dismiss the company</button>
+        <button type="button" id="t-leave">Leave the lists</button>
+      </div>
+    </div>
+  </div>
+
   <div class="bar bottom">
     <div class="muster">
       <p class="hint" id="hint"></p>
@@ -111,6 +137,7 @@ body { margin: 0; }
 <script src="js/draw.js"></script>
 <script src="js/input.js"></script>
 <script src="js/campaign.js"></script>
+<script src="js/tourney.js"></script>
 <script src="js/save.js"></script>
 <script src="js/main.js"></script>
 </body>

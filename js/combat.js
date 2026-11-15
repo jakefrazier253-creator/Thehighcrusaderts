@@ -35,8 +35,9 @@ function orderAttack(t) {
 // ---------- Combat ----------
 // Remember where one of your men was standing before he went off to fight on his own initiative.
 function keepPost(u) { if (u.team === 'eng' && u.type.speed && u.post == null) u.post = tileOf(u); }
-function hit(t, dmg, src) {
+function hit(t, dmg, src, ranged) {
   if (t.hp <= 0) return;
+  if (ranged && t.type.shield) dmg *= 0.4;
   t.hp -= dmg; t.hurt = 0.12;
   // Your men stand together: when one is hit, idle comrades close by go for the attacker.
   if (t.team === 'eng' && src && src.hp > 0) for (const o of units) {
@@ -51,8 +52,8 @@ function strike(u, t) {
   u.cool = u.type.cd;
   if (u.type.shot === 'arrow') shots.push({ x: u.x, y: u.y - 8, t, dmg: u.type.dmg, src: u });
   else if (u.type.shot === 'beam') {
-    fx.push({ k: 'beam', x0: u.x + u.face * 6, y0: u.y - 7, x1: t.x, y1: t.y - t.type.mid, age: 0, life: 0.14 });
-    hit(t, u.type.dmg, u);
+    fx.push({ k: 'beam', x0: u.x + u.face * 6, y0: u.y - u.type.mid - 1, x1: t.x, y1: t.y - t.type.mid, age: 0, life: 0.14, c: u.type.tint });
+    hit(t, u.type.dmg, u, true);
   } else {
     // A knight who strikes at the end of a run hits twice as hard.
     const charge = !!u.type.charge && u.run > 40;
@@ -77,7 +78,9 @@ function think(u, dt) {
     let best = null, bd = u.aggro * u.aggro;
     for (const o of units) {
       if (o.team === u.team || o.hp <= 0) continue;
-      const d = (o.x - u.x) ** 2 + (o.y - u.y) ** 2;
+      let d = (o.x - u.x) ** 2 + (o.y - u.y) ** 2;
+      // Drones go looking for archers and gunners first.
+      if (u.type.hunts && !o.type.shot) d *= 6;
       if (d < bd) { bd = d; best = o; }
     }
     if (best) { keepPost(u); u.target = best; u.order = 'auto'; u.repath = 0; }
